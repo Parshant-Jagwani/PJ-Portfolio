@@ -32,7 +32,7 @@ jobs:
       - name: Test website availability
         run: |
           # Add your deployment URL here
-          DEPLOYED_URL="http://${{ secrets.HOST_DNS }}"
+          DEPLOYED_URL="${{ secrets.HOST_DNS }}"
 
           # Make an HTTP request and check for a success status (HTTP 200)
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $DEPLOYED_URL)
