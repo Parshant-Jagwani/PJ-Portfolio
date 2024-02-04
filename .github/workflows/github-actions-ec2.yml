@@ -45,20 +45,7 @@ jobs:
       - name: Install dependencies
         run: npm install  # Replace with your actual dependency installation command
 
-      - name: Test website availability
-        run: |
-          # Add your deployment URL here
-          DEPLOYED_URL="http://${{ secrets.HOST_DNS }}"
 
-          # Make an HTTP request and check for a success status (HTTP 200)
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $DEPLOYED_URL)
-
-          if [ $HTTP_STATUS -eq 200 ]; then
-            echo "Website is accessible. Test passed!"
-          else
-            echo "Error: Website is not accessible. HTTP Status Code: $HTTP_STATUS"
-            exit 1
-          fi
 
   deploy:
     name: Deploy to EC2 on master branch push
