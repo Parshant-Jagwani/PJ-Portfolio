@@ -19,31 +19,34 @@ jobs:
           # Add your build commands here
           # Example: npm install, mvn clean install, etc.
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
+test:
+  name: Test
+  runs-on: ubuntu-latest
 
-    needs: [build]
+  needs: [build]
 
-    steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
+  steps:
+    - name: Checkout the files
+      uses: actions/checkout@v2
 
-      - name: Test website availability
-        run: |
-          # Add your deployment URL here
-          DEPLOYED_URL="${{ secrets.HOST_DNS }}"
+    - name: Debugging - Print environment and network information
+      run: |
+        env
+        ip a
+        ip r
 
-          # Make an HTTP request and check for a success status (HTTP 200)
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $DEPLOYED_URL)
+    - name: Test website availability
+      run: |
+        DEPLOYED_URL="http://${{ secrets.HOST_DNS }}"
+        echo "Testing accessibility of $DEPLOYED_URL"
+        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -m 30 $DEPLOYED_URL)
 
-          if [ $HTTP_STATUS -eq 200 ]; then
-            echo "Website is accessible. Test passed!"
-          else
-            echo "Error: Website is not accessible. HTTP Status Code: $HTTP_STATUS"
-            exit 1
-          fi
-
+        if [ $HTTP_STATUS -eq 200 ]; then
+          echo "Website is accessible. Test passed!"
+        else
+          echo "Error: Website is not accessible. HTTP Status Code: $HTTP_STATUS"
+          exit 1
+        fi
   deploy:
     name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
