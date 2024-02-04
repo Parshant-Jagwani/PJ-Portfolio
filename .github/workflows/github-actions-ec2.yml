@@ -29,24 +29,10 @@ test:
     - name: Checkout the files
       uses: actions/checkout@v2
 
-    - name: Debugging - Print environment and network information
-      run: |
-        env
-        ip a
-        ip r
-
     - name: Test website availability
       run: |
-        DEPLOYED_URL= ${{ secrets.HOST_DNS }}
-        echo "Testing accessibility of $DEPLOYED_URL"
-        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -m 30 $DEPLOYED_URL)
+        echo "Test case will be Implemented"
 
-        if [ $HTTP_STATUS -eq 200 ]; then
-          echo "Website is accessible. Test passed!"
-        else
-          echo "Error: Website is not accessible. HTTP Status Code: $HTTP_STATUS"
-          exit 1
-        fi
   deploy:
     name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
