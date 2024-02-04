@@ -12,23 +12,71 @@ jobs:
 
     steps:
       - name: Checkout the files
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.0.1  # Use a version that is compatible with Node.js 20
+
+      - name: Set up Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install  # Replace with your actual dependency installation command
 
       - name: Build project
         run: |
           # Add your build commands here
-          # Example: npm install, mvn clean install, etc.
+          # Example: npm run build, etc.
 
-
-  deploy:
-    name: Deploy to EC2 on master branch push
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     needs: [build]
 
     steps:
       - name: Checkout the files
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.0.1  # Use a version that is compatible with Node.js 20
+
+      - name: Set up Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install  # Replace with your actual dependency installation command
+
+      - name: Test website availability
+        run: |
+          # Add your deployment URL here
+          DEPLOYED_URL="http://${{ secrets.HOST_DNS }}"
+
+          # Make an HTTP request and check for a success status (HTTP 200)
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $DEPLOYED_URL)
+
+          if [ $HTTP_STATUS -eq 200 ]; then
+            echo "Website is accessible. Test passed!"
+          else
+            echo "Error: Website is not accessible. HTTP Status Code: $HTTP_STATUS"
+            exit 1
+          fi
+
+  deploy:
+    name: Deploy to EC2 on master branch push
+    runs-on: ubuntu-latest
+
+    needs: [build, test]
+
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v4.0.1  # Use a version that is compatible with Node.js 20
+
+      - name: Set up Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install  # Replace with your actual dependency installation command
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
