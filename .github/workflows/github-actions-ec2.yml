@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout the files
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Build project
         run: |
@@ -27,7 +27,7 @@ test:
 
   steps:
     - name: Checkout the files
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Test website availability
       run: |
@@ -41,7 +41,7 @@ test:
 
     steps:
       - name: Checkout the files
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
