@@ -27,7 +27,7 @@ test:
 
   steps:
     - name: Checkout the files
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.5.0
 
     - name: Test website availability
       run: |
